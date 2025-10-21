@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced JavaScript!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #e84393;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .explanation {
+            background: #fff5f7;
+            border-left: 5px solid #e84393;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .keyword { color: #ff79c6; }
+        .function { color: #50fa7b; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .number { color: #bd93f9; }
+
+        .interactive-demo {
+            background: #e8f5e9;
+            border: 3px solid #4CAF50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .demo-output {
+            background: white;
+            border: 2px solid #e84393;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 40px;
+            font-family: monospace;
+        }
+
+        .challenge-section {
+            background: #fff8e1;
+            border: 3px solid #ffb300;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .challenge-item {
+            background: white;
+            border: 2px solid #ffb300;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .code-editor {
+            width: 100%;
+            min-height: 120px;
+            background: #2d2d2d;
+            color: #f8f8f8;
+            border: 3px solid #e84393;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            margin: 10px 0;
+        }
+
+        .code-output {
+            background: #1e1e1e;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            min-height: 50px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .error-output {
+            background: #1e1e1e;
+            color: #ff5252;
+            border: 2px solid #ff5252;
+        }
+
+        button {
+            background: #e84393;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #fd79a8;
+            transform: scale(1.05);
+        }
+
+        .run-button {
+            background: #4CAF50;
+        }
+
+        .run-button:hover {
+            background: #45a049;
+        }
+
+        .hint-button {
+            background: #ff9800;
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        .hint-button:hover {
+            background: #e68900;
+        }
+
+        .step {
+            background: white;
+            border: 2px solid #e84393;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .step-number {
+            background: #e84393;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .hint {
+            background: #fff9e6;
+            border-left: 4px solid #ff9800;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+            border-radius: 5px;
+        }
+
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .failure {
+            color: #ff5252;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            color: #e84393;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .todo-item {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .todo-item.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Advanced JavaScript! 🔥</h1>
+        <p class="subtitle">Master powerful concepts and build real projects!</p>
+        
+        <div style="background: #e8f5e9; border: 3px solid #4CAF50; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center;">
+            <h3 style="margin: 0; color: #2e7d32;">🎯 Lesson 4: Arrow Functions, Callbacks & More</h3>
+            <p style="margin: 10px 0 0 0; color: #555;">Level up with professional JavaScript techniques!</p>
+        </div>
+
+        <div class="explanation">
+            <h2>➡️ Arrow Functions</h2>
+            <p>Arrow functions are a shorter way to write functions. They're super popular in modern JavaScript!</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Arrow Function Syntax:</strong> A cleaner way to write functions
+        </div>
+
+        <div class="code-block">
+<span class="comment">// Old way (function expression)</span>
+<span class="keyword">let</span> <span class="function">add</span> = <span class="keyword">function</span>(a, b) {
+    <span class="keyword">return</span> a + b;
+};
+
+<span class="comment">// New way (arrow function) ✨</span>
+<span class="keyword">let</span> <span class="function">add</span> = (a, b) => {
+    <span class="keyword">return</span> a + b;
+};
+
+<span class="comment">// Even shorter! (implicit return)</span>
+<span class="keyword">let</span> <span class="function">add</span> = (a, b) => a + b;
+
+<span class="comment">// Single parameter (no parentheses needed)</span>
+<span class="keyword">let</span> <span class="function">square</span> = x => x * x;
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Array Methods:</strong> Powerful tools for working with arrays
+        </div>
+
+        <div class="code-block">
+<span class="keyword">let</span> <span class="function">numbers</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+
+<span class="comment">// .map() - transform each item</span>
+<span class="keyword">let</span> <span class="function">doubled</span> = numbers.<span class="function">map</span>(num => num * <span class="number">2</span>);  <span class="comment">// [2, 4, 6, 8, 10]</span>
+
+<span class="comment">// .filter() - keep items that pass a test</span>
+<span class="keyword">let</span> <span class="function">evens</span> = numbers.<span class="function">filter</span>(num => num % <span class="number">2</span> === <span class="number">0</span>);  <span class="comment">// [2, 4]</span>
+
+<span class="comment">// .reduce() - combine all items into one value</span>
+<span class="keyword">let</span> <span class="function">sum</span> = numbers.<span class="function">reduce</span>((total, num) => total + num, <span class="number">0</span>);  <span class="comment">// 15</span>
+
+<span class="comment">// .find() - get first item that matches</span>
+<span class="keyword">let</span> <span class="function">found</span> = numbers.<span class="function">find</span>(num => num > <span class="number">3</span>);  <span class="comment">// 4</span>
+        </div>
+
+        <div class="interactive-demo">
+            <h3>🎨 Array Methods Demo</h3>
+            <button onclick="demoMap()">Demo .map()</button>
+            <button onclick="demoFilter()">Demo .filter()</button>
+            <button onclick="demoReduce()">Demo .reduce()</button>
+            <div class="demo-output" id="arrayDemo">Click a button to see array methods in action!</div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Template Literals:</strong> Easier string formatting with backticks
+        </div>
+
+        <div class="code-block">
+<span class="keyword">let</span> <span class="function">name</span> = <span class="string">"Alex"</span>;
+<span class="keyword">let</span> <span class="function">age</span> = <span class="number">15</span>;
+
+<span class="comment">// Old way (string concatenation)</span>
+<span class="keyword">let</span> <span class="function">message1</span> = <span class="string">"Hi, I'm "</span> + name + <span class="string">" and I'm "</span> + age + <span class="string">" years old."</span>;
+
+<span class="comment">// New way (template literals) ✨</span>
+<span class="keyword">let</span> <span class="function">message2</span> = <span class="string">`Hi, I'm ${name} and I'm ${age} years old.`</span>;
+
+<span class="comment">// Multi-line strings (super useful!)</span>
+<span class="keyword">let</span> <span class="function">html</span> = <span class="string">`
+  &lt;div&gt;
+    &lt;h1&gt;${name}&lt;/h1&gt;
+    &lt;p&gt;Age: ${age}&lt;/p&gt;
+  &lt;/div&gt;
+`</span>;
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Destructuring:</strong> Unpack values from arrays and objects
+        </div>
+
+        <div class="code-block">
+<span class="comment">// Array destructuring</span>
+<span class="keyword">let</span> <span class="function">colors</span> = [<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>];
+<span class="keyword">let</span> [first, second, third] = colors;
+console.log(first);  <span class="comment">// "red"</span>
+
+<span class="comment">// Object destructuring</span>
+<span class="keyword">let</span> <span class="function">person</span> = { name: <span class="string">"Sam"</span>, age: <span class="number">20</span>, city: <span class="string">"NYC"</span> };
+<span class="keyword">let</span> { name, age } = person;
+console.log(name);  <span class="comment">// "Sam"</span>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <strong>Spread Operator:</strong> Expand arrays and objects easily
+        </div>
+
+        <div class="code-block">
+<span class="comment">// Combine arrays</span>
+<span class="keyword">let</span> <span class="function">arr1</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">let</span> <span class="function">arr2</span> = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];
+<span class="keyword">let</span> <span class="function">combined</span> = [...arr1, ...arr2];  <span class="comment">// [1, 2, 3, 4, 5, 6]</span>
+
+<span class="comment">// Copy an array</span>
+<span class="keyword">let</span> <span class="function">original</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
+<span class="keyword">let</span> <span class="function">copy</span> = [...original];
+
+<span class="comment">// Combine objects</span>
+<span class="keyword">let</span> <span class="function">obj1</span> = { a: <span class="number">1</span>, b: <span class="number">2</span> };
+<span class="keyword">let</span> <span class="function">obj2</span> = { c: <span class="number">3</span>, d: <span class="number">4</span> };
+<span class="keyword">let</span> <span class="function">merged</span> = { ...obj1, ...obj2 };  <span class="comment">// { a: 1, b: 2, c: 3, d: 4 }</span>
+        </div>
+
+        <div class="step">
+            <span class="step-number">6</span>
+            <strong>setTimeout & setInterval:</strong> Control timing in your code
+        </div>
+
+        <div class="code-block">
+<span class="comment">// Run code after a delay (milliseconds)</span>
+<span class="function">setTimeout</span>(() => {
+    console.log(<span class="string">"This runs after 2 seconds"</span>);
+}, <span class="number">2000</span>);
+
+<span class="comment">// Run code repeatedly</span>
+<span class="keyword">let</span> <span class="function">counter</span> = <span class="number">0</span>;
+<span class="keyword">let</span> <span class="function">interval</span> = <span class="function">setInterval</span>(() => {
+    counter++;
+    console.log(<span class="string">"Count: "</span> + counter);
+    <span class="keyword">if</span> (counter === <span class="number">5</span>) {
+        <span class="function">clearInterval</span>(interval);  <span class="comment">// Stop the interval</span>
+    }
+}, <span class="number">1000</span>);
+        </div>
+
+        <div class="challenge-section">
+            <h2>✏️ Advanced Challenges!</h2>
+
+            <div class="challenge-item">
+                <h3>Challenge 1: Arrow Functions</h3>
+                <p>Convert this function to an arrow function: <code>function multiply(a, b) { return a * b; }</code></p>
+                <textarea class="code-editor" id="challenge1">// Convert to arrow function
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(1)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(1)">💡 Show Hint</button>
+                <div class="hint" id="hint1">
+                    <strong>Hint:</strong> Use: let multiply = (a, b) => a * b;<br>
+                    Then test it: console.log(multiply(5, 3));
+                </div>
+                <div class="code-output" id="output1"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 2: Array .map()</h3>
+                <p>Use .map() to create a new array where each number is tripled. Start with: <code>let nums = [1, 2, 3, 4, 5];</code></p>
+                <textarea class="code-editor" id="challenge2">// Use .map() to triple each number
+let nums = [1, 2, 3, 4, 5];
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(2)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(2)">💡 Show Hint</button>
+                <div class="hint" id="hint2">
+                    <strong>Hint:</strong> let tripled = nums.map(n => n * 3);<br>
+                    Then console.log(tripled);
+                </div>
+                <div class="code-output" id="output2"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 3: Array .filter()</h3>
+                <p>Use .filter() to get only numbers greater than 10 from this array: <code>[5, 12, 8, 15, 3, 20]</code></p>
+                <textarea class="code-editor" id="challenge3">// Filter numbers greater than 10
+let numbers = [5, 12, 8, 15, 3, 20];
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(3)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(3)">💡 Show Hint</button>
+                <div class="hint" id="hint3">
+                    <strong>Hint:</strong> let filtered = numbers.filter(num => num > 10);<br>
+                    Then console.log(filtered);
+                </div>
+                <div class="code-output" id="output3"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 4: Template Literals</h3>
+                <p>Create variables for a book title and author, then use template literals to create a message: "I'm reading [title] by [author]"</p>
+                <textarea class="code-editor" id="challenge4">// Use template literals
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(4)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(4)">💡 Show Hint</button>
+                <div class="hint" id="hint4">
+                    <strong>Hint:</strong> Use backticks ` and ${variable} syntax<br>
+                    Example: let message = `I'm reading ${title} by ${author}`;
+                </div>
+                <div class="code-output" id="output4"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 5: Build a Mini Todo App!</h3>
+                <p>Create a todo list app! Add functionality to add todos, mark them complete, and delete them.</p>
+                <div id="todoContainer" style="margin: 15px 0;">
+                    <input type="text" id="todoInput" placeholder="Enter a task..." style="padding: 10px; width: 60%; border: 2px solid #e84393; border-radius: 5px;">
+                    <button id="addTodoBtn" style="background: #e84393; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add Todo</button>
+                    <div id="todoList" style="margin-top: 15px;"></div>
+                </div>
+                <textarea class="code-editor" id="challenge5">// Build your todo app
+let todos = [];
+
+// Add your event listeners and functions here
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(5)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(5)">💡 Show Hint</button>
+                <div class="hint" id="hint5">
+                    <strong>Hint:</strong> Use addEventListener on the button, push to the todos array, and use innerHTML to display the list!<br>
+                    You can use template literals to create the HTML for each todo item.
+                </div>
+                <div class="code-output" id="output5"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 6: Countdown Timer</h3>
+                <p>Create a 10-second countdown timer that displays the remaining seconds and says "Time's up!" when done.</p>
+                <div id="timerDisplay" style="background: #fff5f7; padding: 20px; border-radius: 10px; font-size: 2em; text-align: center; margin: 10px 0;">Ready to start!</div>
+                <button id="startTimer" style="background: #e84393; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Start Countdown</button>
+                <textarea class="code-editor" id="challenge6">// Create a countdown timer
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(6)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(6)">💡 Show Hint</button>
+                <div class="hint" id="hint6">
+                    <strong>Hint:</strong> Use setInterval() to update every second, and clearInterval() when the timer reaches 0!
+                </div>
+                <div class="code-output" id="output6"></div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h2>🎓 You're Becoming a Pro!</h2>
+            <p><strong>1.</strong> Arrow functions make code shorter and cleaner</p>
+            <p><strong>2.</strong> Array methods (.map, .filter, .reduce) are incredibly powerful</p>
+            <p><strong>3.</strong> Template literals make string formatting easy</p>
+            <p><strong>4.</strong> Destructuring helps you extract values quickly</p>
+            <p><strong>5.</strong> Timing functions let you control when code runs</p>
+            <p><strong>6.</strong> These are the tools professional developers use every day!</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="index3.html">← Back to Lesson 3</a>
+            <a href="index5.html">Final Project →</a>
+        </div>
+    </div>
+
+    <script>
+        // Demo functions
+        function demoMap() {
+            const numbers = [1, 2, 3, 4, 5];
+            const doubled = numbers.map(n => n * 2);
+            document.getElementById('arrayDemo').innerHTML = 
+                `Original: [${numbers}]<br>After .map(n => n * 2): [${doubled}]`;
+        }
+
+        function demoFilter() {
+            const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            const evens = numbers.filter(n => n % 2 === 0);
+            document.getElementById('arrayDemo').innerHTML = 
+                `Original: [${numbers}]<br>After .filter(n => n % 2 === 0): [${evens}]`;
+        }
+
+        function demoReduce() {
+            const numbers = [1, 2, 3, 4, 5];
+            const sum = numbers.reduce((total, n) => total + n, 0);
+            document.getElementById('arrayDemo').innerHTML = 
+                `Original: [${numbers}]<br>After .reduce((total, n) => total + n, 0): ${sum}`;
+        }
+
+        // Challenge runner
+        function runChallenge(challengeNumber) {
+            const code = document.getElementById(`challenge${challengeNumber}`).value;
+            const outputDiv = document.getElementById(`output${challengeNumber}`);
+            
+            outputDiv.innerHTML = '';
+            outputDiv.className = 'code-output';
+            
+            let logs = [];
+            const originalLog = console.log;
+            console.log = function(...args) {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+                ).join(' '));
+                originalLog.apply(console, args);
+            };
+            
+            try {
+                eval(code);
+                console.log = originalLog;
+                
+                let isValid = false;
+                let feedback = '';
+                
+                switch(challengeNumber) {
+                    case 1:
+                        isValid = code.includes('=>') && logs.length > 0;
+                        feedback = isValid ? '✅ Perfect! You converted to an arrow function!' : '❌ Convert the function to use arrow function syntax (=>)!';
+                        break;
+                    
+                    case 2:
+                        isValid = code.includes('.map') && logs.length > 0;
+                        feedback = isValid ? '✅ Great! You used .map() correctly!' : '❌ Use .map() to triple each number in the array!';
+                        break;
+                    
+                    case 3:
+                        isValid = code.includes('.filter') && logs.length > 0;
+                        feedback = isValid ? '✅ Excellent! You filtered the array!' : '❌ Use .filter() to get numbers greater than 10!';
+                        break;
+                    
+                    case 4:
+                        isValid = code.includes('`') && code.includes('${') && logs.length > 0;
+                        feedback = isValid ? '✅ Awesome! You used template literals!' : '❌ Use template literals with backticks ` and ${} syntax!';
+                        break;
+                    
+                    case 5:
+                        isValid = code.includes('addEventListener') || code.includes('onclick');
+                        feedback = isValid ? '✅ Amazing! Try adding some todos!' : '❌ Add event listeners to make the todo app work!';
+                        break;
+                    
+                    case 6:
+                        isValid = code.includes('setInterval') || code.includes('setTimeout');
+                        feedback = isValid ? '✅ Great job! Click Start Countdown to test!' : '❌ Use setInterval or setTimeout to create the countdown!';
+                        break;
+                }
+                
+                if (isValid) {
+                    outputDiv.innerHTML = '<span class="success">' + feedback + '</span>\n' + (logs.length > 0 ? 'Output:\n' + logs.join('\n') : '');
+                } else {
+                    outputDiv.className = 'code-output error-output';
+                    outputDiv.innerHTML = '<span class="failure">' + feedback + '</span>';
+                }
+                
+            } catch (error) {
+                console.log = originalLog;
+                outputDiv.className = 'code-output error-output';
+                outputDiv.innerHTML = '<span class="failure">❌ Oops! Error:</span>\n' + error.message + '\n\nCheck your code and try again! 💪';
+            }
+        }
+
+        function toggleHint(hintNumber) {
+            const hint = document.getElementById(`hint${hintNumber}`);
+            if (hint.style.display === 'block') {
+                hint.style.display = 'none';
+            } else {
+                hint.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

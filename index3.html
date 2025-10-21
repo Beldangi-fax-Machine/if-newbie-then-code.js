@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript DOM Magic!</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #00b894;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .explanation {
+            background: #e8f8f5;
+            border-left: 5px solid #00b894;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .keyword { color: #ff79c6; }
+        .function { color: #50fa7b; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; font-style: italic; }
+        .number { color: #bd93f9; }
+
+        .interactive-demo {
+            background: #fff3cd;
+            border: 3px dashed #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .demo-box {
+            background: white;
+            border: 3px solid #00b894;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+
+        .challenge-section {
+            background: #e3f2fd;
+            border: 3px solid #2196F3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .challenge-item {
+            background: white;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .code-editor {
+            width: 100%;
+            min-height: 120px;
+            background: #2d2d2d;
+            color: #f8f8f8;
+            border: 3px solid #00b894;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+            margin: 10px 0;
+        }
+
+        .code-output {
+            background: #1e1e1e;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            min-height: 50px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .error-output {
+            background: #1e1e1e;
+            color: #ff5252;
+            border: 2px solid #ff5252;
+        }
+
+        button {
+            background: #00b894;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #00cec9;
+            transform: scale(1.05);
+        }
+
+        .run-button {
+            background: #4CAF50;
+        }
+
+        .run-button:hover {
+            background: #45a049;
+        }
+
+        .hint-button {
+            background: #ff9800;
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+
+        .hint-button:hover {
+            background: #e68900;
+        }
+
+        .step {
+            background: white;
+            border: 2px solid #00b894;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .step-number {
+            background: #00b894;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .hint {
+            background: #fff9e6;
+            border-left: 4px solid #ff9800;
+            padding: 10px;
+            margin-top: 10px;
+            display: none;
+            border-radius: 5px;
+        }
+
+        .success {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .failure {
+            color: #ff5252;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            color: #00b894;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #00b894;
+            border-radius: 5px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ DOM Magic! ✨</h1>
+        <p class="subtitle">Make websites interactive and alive!</p>
+        
+        <div style="background: #e8f5e9; border: 3px solid #4CAF50; border-radius: 10px; padding: 15px; margin-bottom: 20px; text-align: center;">
+            <h3 style="margin: 0; color: #2e7d32;">🎨 Lesson 3: Controlling Web Pages with JavaScript</h3>
+            <p style="margin: 10px 0 0 0; color: #555;">Learn how to change HTML and make pages interactive!</p>
+        </div>
+
+        <div class="explanation">
+            <h2>🌐 What is the DOM?</h2>
+            <p>DOM stands for Document Object Model. It's how JavaScript talks to your HTML! Think of it as a bridge that lets your code change what people see on the webpage.</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>Selecting Elements:</strong> Find HTML elements to work with
+        </div>
+
+        <div class="code-block">
+<span class="comment">// Get an element by its ID</span>
+<span class="keyword">let</span> <span class="function">title</span> = document.<span class="function">getElementById</span>(<span class="string">"myTitle"</span>);
+
+<span class="comment">// Get elements by class name</span>
+<span class="keyword">let</span> <span class="function">buttons</span> = document.<span class="function">getElementsByClassName</span>(<span class="string">"btn"</span>);
+
+<span class="comment">// Modern way - querySelector (most flexible!)</span>
+<span class="keyword">let</span> <span class="function">box</span> = document.<span class="function">querySelector</span>(<span class="string">".demo-box"</span>);
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>Changing Content:</strong> Modify what appears on the page
+        </div>
+
+        <div class="code-block">
+<span class="comment">// Change text inside an element</span>
+<span class="keyword">let</span> <span class="function">heading</span> = document.<span class="function">querySelector</span>(<span class="string">"h1"</span>);
+heading.textContent = <span class="string">"New Title!"</span>;
+
+<span class="comment">// Change HTML inside an element</span>
+<span class="keyword">let</span> <span class="function">container</span> = document.<span class="function">querySelector</span>(<span class="string">".container"</span>);
+container.innerHTML = <span class="string">"&lt;p&gt;New paragraph!&lt;/p&gt;"</span>;
+        </div>
+
+        <div class="interactive-demo">
+            <h3>Try It Live! 🎮</h3>
+            <div class="demo-box" id="demo1">Click the button below!</div>
+            <button onclick="changeText()">Change Text</button>
+            <button onclick="changeColor()">Change Color</button>
+            <button onclick="makeItBig()">Make It Big!</button>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>Changing Styles:</strong> Make elements look different
+        </div>
+
+        <div class="code-block">
+<span class="keyword">let</span> <span class="function">box</span> = document.<span class="function">querySelector</span>(<span class="string">".demo-box"</span>);
+
+<span class="comment">// Change individual styles</span>
+box.style.backgroundColor = <span class="string">"lightblue"</span>;
+box.style.color = <span class="string">"darkblue"</span>;
+box.style.fontSize = <span class="string">"24px"</span>;
+box.style.borderRadius = <span class="string">"20px"</span>;
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Event Listeners:</strong> Respond to user actions
+        </div>
+
+        <div class="code-block">
+<span class="keyword">let</span> <span class="function">button</span> = document.<span class="function">querySelector</span>(<span class="string">"button"</span>);
+
+<span class="comment">// Listen for clicks</span>
+button.<span class="function">addEventListener</span>(<span class="string">"click"</span>, <span class="keyword">function</span>() {
+    console.log(<span class="string">"Button was clicked!"</span>);
+});
+
+<span class="comment">// Listen for typing in an input</span>
+<span class="keyword">let</span> <span class="function">input</span> = document.<span class="function">querySelector</span>(<span class="string">"input"</span>);
+input.<span class="function">addEventListener</span>(<span class="string">"input"</span>, <span class="keyword">function</span>() {
+    console.log(<span class="string">"You typed: "</span> + input.value);
+});
+        </div>
+
+        <div class="interactive-demo">
+            <h3>Interactive Input Demo! ⌨️</h3>
+            <input type="text" id="nameInput" placeholder="Type your name...">
+            <div class="demo-box" id="demo2">Your text will appear here!</div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <strong>Creating Elements:</strong> Add new HTML with JavaScript
+        </div>
+
+        <div class="code-block">
+<span class="comment">// Create a new element</span>
+<span class="keyword">let</span> <span class="function">newDiv</span> = document.<span class="function">createElement</span>(<span class="string">"div"</span>);
+newDiv.textContent = <span class="string">"I'm a new div!"</span>;
+newDiv.style.color = <span class="string">"purple"</span>;
+
+<span class="comment">// Add it to the page</span>
+document.body.<span class="function">appendChild</span>(newDiv);
+        </div>
+
+        <div class="challenge-section">
+            <h2>✏️ DOM Challenges!</h2>
+
+            <div class="challenge-item">
+                <h3>Challenge 1: Change Text</h3>
+                <p>Select the element with id "challenge1Box" and change its text to "I changed this!"</p>
+                <div id="challenge1Box" style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin: 10px 0;">Original Text</div>
+                <textarea class="code-editor" id="challenge1">// Write your code here
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(1)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(1)">💡 Show Hint</button>
+                <div class="hint" id="hint1">
+                    <strong>Hint:</strong> Use document.getElementById("challenge1Box") and then .textContent to change the text!
+                </div>
+                <div class="code-output" id="output1"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 2: Change Colors</h3>
+                <p>Select the element with id "challenge2Box" and change its background color to your favorite color!</p>
+                <div id="challenge2Box" style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 10px 0;">Color me!</div>
+                <textarea class="code-editor" id="challenge2">// Change the background color
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(2)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(2)">💡 Show Hint</button>
+                <div class="hint" id="hint2">
+                    <strong>Hint:</strong> Use .style.backgroundColor = "yourcolor"; (colors can be names like "pink" or codes like "#ff6b6b")
+                </div>
+                <div class="code-output" id="output2"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 3: Click Counter</h3>
+                <p>Create a click counter! Add an event listener to the button that increases the count each time it's clicked.</p>
+                <button id="counterBtn" style="background: #00b894; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Click Me!</button>
+                <div id="counterDisplay" style="background: #e8f8f5; padding: 15px; border-radius: 10px; margin: 10px 0; font-size: 1.2em;">Clicks: 0</div>
+                <textarea class="code-editor" id="challenge3">// Create a click counter
+let count = 0;
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(3)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(3)">💡 Show Hint</button>
+                <div class="hint" id="hint3">
+                    <strong>Hint:</strong> Use addEventListener("click", function() { }) and update the textContent of counterDisplay!
+                </div>
+                <div class="code-output" id="output3"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 4: Create New Elements</h3>
+                <p>Create a new paragraph element with the text "I was created with JavaScript!" and add it to the div below.</p>
+                <div id="challenge4Container" style="background: #f3e5f5; padding: 15px; border-radius: 10px; margin: 10px 0; min-height: 60px;">
+                    <p>Existing paragraph</p>
+                </div>
+                <textarea class="code-editor" id="challenge4">// Create and add a new paragraph
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(4)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(4)">💡 Show Hint</button>
+                <div class="hint" id="hint4">
+                    <strong>Hint:</strong> Use document.createElement("p"), set textContent, then use appendChild() to add it!
+                </div>
+                <div class="code-output" id="output4"></div>
+            </div>
+
+            <div class="challenge-item">
+                <h3>Challenge 5: Build a Simple App!</h3>
+                <p>Create a mini greeting app! When someone types their name in the input and clicks the button, display "Hello, [name]!" in the greeting box.</p>
+                <input type="text" id="nameField" placeholder="Enter your name..." style="padding: 10px; border: 2px solid #00b894; border-radius: 5px;">
+                <button id="greetBtn" style="background: #00b894; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Greet Me!</button>
+                <div id="greetingBox" style="background: #e8f8f5; padding: 15px; border-radius: 10px; margin: 10px 0; font-size: 1.2em;">Greeting will appear here...</div>
+                <textarea class="code-editor" id="challenge5">// Build your greeting app
+
+</textarea>
+                <button class="run-button" onclick="runChallenge(5)">▶️ Run Code</button>
+                <button class="hint-button" onclick="toggleHint(5)">💡 Show Hint</button>
+                <div class="hint" id="hint5">
+                    <strong>Hint:</strong> Get the value from the input with .value, then update the greeting box's textContent!
+                </div>
+                <div class="code-output" id="output5"></div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h2>💡 DOM Power-Ups!</h2>
+            <p><strong>1.</strong> Use querySelector() for easy element selection</p>
+            <p><strong>2.</strong> .textContent changes text, .innerHTML changes HTML</p>
+            <p><strong>3.</strong> .style lets you change any CSS property</p>
+            <p><strong>4.</strong> addEventListener() makes pages interactive</p>
+            <p><strong>5.</strong> You can create, modify, and remove elements with JavaScript!</p>
+        </div>
+
+        <div class="nav-links">
+            <a href="index2.html">← Back to Lesson 2</a>
+            <a href="index4.html">Next Lesson →</a>
+        </div>
+    </div>
+
+    <script>
+        // Demo functions
+        function changeText() {
+            document.getElementById("demo1").textContent = "Text Changed! 🎉";
+        }
+
+        function changeColor() {
+            const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#f9ca24", "#6c5ce7"];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById("demo1").style.backgroundColor = randomColor;
+        }
+
+        function makeItBig() {
+            const demo = document.getElementById("demo1");
+            demo.style.fontSize = "2em";
+            demo.style.fontWeight = "bold";
+        }
+
+        // Live input demo
+        document.getElementById("nameInput").addEventListener("input", function() {
+            const name = this.value;
+            document.getElementById("demo2").textContent = name ? "Hello, " + name + "! 👋" : "Your text will appear here!";
+        });
+
+        // Challenge runner
+        function runChallenge(challengeNumber) {
+            const code = document.getElementById(`challenge${challengeNumber}`).value;
+            const outputDiv = document.getElementById(`output${challengeNumber}`);
+            
+            outputDiv.innerHTML = '';
+            outputDiv.className = 'code-output';
+            
+            let logs = [];
+            const originalLog = console.log;
+            console.log = function(...args) {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+                ).join(' '));
+                originalLog.apply(console, args);
+            };
+            
+            try {
+                eval(code);
+                console.log = originalLog;
+                
+                let isValid = false;
+                let feedback = '';
+                
+                switch(challengeNumber) {
+                    case 1:
+                        const box1 = document.getElementById("challenge1Box");
+                        isValid = box1.textContent !== "Original Text";
+                        feedback = isValid ? '✅ Perfect! You changed the text!' : '❌ Make sure to change the textContent of challenge1Box!';
+                        break;
+                    
+                    case 2:
+                        const box2 = document.getElementById("challenge2Box");
+                        isValid = box2.style.backgroundColor && box2.style.backgroundColor !== "rgb(255, 243, 205)";
+                        feedback = isValid ? '✅ Great! You changed the color!' : '❌ Use .style.backgroundColor to change the color!';
+                        break;
+                    
+                    case 3:
+                        isValid = code.includes('addEventListener') && code.includes('click');
+                        feedback = isValid ? '✅ Awesome! Click the button to test your counter!' : '❌ Add an event listener to the counterBtn that updates the count!';
+                        break;
+                    
+                    case 4:
+                        const container4 = document.getElementById("challenge4Container");
+                        isValid = container4.children.length > 1;
+                        feedback = isValid ? '✅ Excellent! You created a new element!' : '❌ Create a new paragraph and appendChild() it to challenge4Container!';
+                        break;
+                    
+                    case 5:
+                        isValid = code.includes('addEventListener') || code.includes('onclick');
+                        feedback = isValid ? '✅ Amazing! Test your greeting app by typing a name!' : '❌ Add functionality to the greet button and update the greetingBox!';
+                        break;
+                }
+                
+                if (isValid) {
+                    outputDiv.innerHTML = '<span class="success">' + feedback + '</span>';
+                } else {
+                    outputDiv.className = 'code-output error-output';
+                    outputDiv.innerHTML = '<span class="failure">' + feedback + '</span>';
+                }
+                
+            } catch (error) {
+                console.log = originalLog;
+                outputDiv.className = 'code-output error-output';
+                outputDiv.innerHTML = '<span class="failure">❌ Oops! Error:</span>\n' + error.message + '\n\nCheck your code and try again! 💪';
+            }
+        }
+
+        function toggleHint(hintNumber) {
+            const hint = document.getElementById(`hint${hintNumber}`);
+            if (hint.style.display === 'block') {
+                hint.style.display = 'none';
+            } else {
+                hint.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
